@@ -1,8 +1,9 @@
 import datetime
 import requests
+import os
 
 # Replace with your actual API key from National Rail
-API_KEY = "YOUR_API_KEY_HERE"
+API_KEY = os.environ['NAT_RAIL_API']
 
 STATION_CODE = "LST"
 
