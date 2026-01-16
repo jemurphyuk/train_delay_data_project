@@ -1,6 +1,6 @@
 import json
 import mysql.connector
-from datetime import datetime
+from datetime import datetime, timezone
 
 class RawStorage:
     def __init__(
@@ -37,7 +37,7 @@ class RawStorage:
             VALUES (%s, %s, %s)
         """
         values = (
-            datetime.utcnow(),
+            datetime.now(timezone.utc),
             station_code,
             json.dumps(payload)
         )
