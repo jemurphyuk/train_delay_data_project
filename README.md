@@ -44,14 +44,6 @@ train_delay_data_project ingests live (or near-real-time) UK train data, process
 * Upcoming services
   * Predicted delay (e.g. “On time”, “Low risk”, “High risk”)
   * Confidence or probability
-## Step-by-step plan to get started
-### Define the scope (1–2 hours)
-•	Define your question: 
-•	Example: “Given a planned train service in the next 30 minutes, will it be delayed by more than 5 minutes at arrival?”
-•	Define MVP: 
-a.	One or two major stations
-b.	A limited time window (e.g. a few weeks of data)
-c.	Batch prediction (run every 5–15 minutes) rather than full streaming
 ## Get and explore the data
 1.	Register / choose data source:
 o	Option A: Use National Rail / Network Rail feeds and pull performance/timetable data.
@@ -67,54 +59,46 @@ o	Difference by time of day or station
 o	Missing or messy fields
 o	This will also help you design your features.
 ### Build a proper data model with dbt
-•	Set up dbt project
-o	Connect it to your Postgres/DuckDB
-o	Create models like
-	stg_trains (cleaned raw train data)
-	stg_movements
-	fct_journey_delays (fact table with delay as a metric)
-•	Create features for the model: 
-o	planned_arrival_time, actual_arrival_time, delay_minutes
-o	hour_of_day, day_of_week, is_peak
-o	route_id, origin_station, destination_station
-o	Historical average delay for route_id at hour_of_day
-•	Add tests:
-o	Use dbt tests to ensure: 
-	No duplicate primary keys
-	Non-null fields where needed
-	Reasonable ranges for delay_minutes
-This shows you understand data quality, which is a big “innovation” checkbox for many teams.
+* Set up dbt project
+  * Connect it to your Postgres/DuckDB
+  * Create models like
+    * stg_trains (cleaned raw train data)
+    * stg_movements
+    * fct_journey_delays (fact table with delay as a metric)
+* Create features for the model: 
+  * planned_arrival_time, actual_arrival_time, delay_minutes
+  * hour_of_day, day_of_week, is_peak
+  * route_id, origin_station, destination_station
+  * Historical average delay for route_id at hour_of_day
+* Add tests:
+  * Use dbt tests to ensure: 
+    * No duplicate primary keys
+    * Non-null fields where needed
+    * Reasonable ranges for delay_minutes
 ### Train and serve a delay prediction model
-•	Model training (offline)
-o	Load your fct_journey_delays into a notebook
-o	Frame it as either
-	Classification: Will delay > 5 minutes? (yes/no)
-	Regression: Predict delay_minutes
-o	Use something like
-	Logistic regression / Random Forest / XGBoost
-•	Track metrics (accuracy / ROC-AUC for classification, MAE for regression)
-o	Plot feature importance
-o	Save the trained model (e.g. using joblib)
-•	Batch scoring
-o	Create a Python script that fetches upcoming services (next 30–60 minutes)
-o	Generates features with dbt models
-o	Loads the saved model and writes predictions into a predicted_delays table
-•	Orchestrate with Airflow/Prefect
-o	DAG flow
-	Task 1: Ingest new data
-	Task 2: Run dbt models
-	Task 3: Run batch predictions
-Build a small “wow” UI
-•	Use Streamlit (fast and simple)
-o	Filter: Station / route / timeframe
-o	Table: Upcoming trains with planned time, predicted delay, risk label
-o	Plot: Historical average delay for that station over the day
-•	Explain it clearly in your README
-o	Overview: What this project does and why it matters
-o	Architecture: Diagram + component explanation
-o	Tech stack: Summarise tools used
-o	How to run: Step-by-step commands
-o	What I learned: A short reflection (this humanises you)
+#### Model training (offline)
+* Load your fct_journey_delays into a notebook
+  * Frame it as either
+    * Classification: Will delay > 5 minutes? (yes/no)
+    * Regression: Predict delay_minutes
+    * Logistic regression / Random Forest / XGBoost
+* Track metrics (accuracy / ROC-AUC for classification, MAE for regression)
+  * Plot feature importance
+  * Save the trained model (e.g. using joblib)
+* Batch scoring
+  * Create a Python script that fetches upcoming services (next 30–60 minutes)
+  * Generates features with dbt models
+  * Loads the saved model and writes predictions into a predicted_delays table
+* Orchestrate with Airflow/Prefect
+  * DAG flow
+    * Task 1: Ingest new data
+    * Task 2: Run dbt models
+    * Task 3: Run batch predictions
+### Build a small but effective UI
+* Use Streamlit (fast and simple)
+  * Filter: Station / route / timeframe
+  * Table: Upcoming trains with planned time, predicted delay, risk label
+  * Plot: Historical average delay for that station over the day
 ## Applicable technologies
 This project demonstrates the following skills and technologies:
 * Modern data stack: dbt, Airflow/Prefect, Streamlit, cloud-like patterns

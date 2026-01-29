@@ -1,10 +1,10 @@
-from .client import NationalRailClient
-from .storage import RawStorage
-from .config import config
+from client import NationalRailClient
+from storage import RawStorage
+from config import Config
 
 class DepartureIngestion:
     def __init__(self, station_code: str = None):
-        self.station_code = station_code or config.DEFAULT_STATION
+        self.station_code = station_code or Config.DEFAULT_STATION
         self.client = NationalRailClient()
         self.storage = RawStorage()
 

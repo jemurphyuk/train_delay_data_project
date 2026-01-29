@@ -1,14 +1,16 @@
 import requests
-from .config import config
+from config import Config
 
 class NationalRailClient:
-    def __init__(self, api_key: str = None):
-        self.api_key = api_key or config.API_KEY
-        self.base_url = config.BASE_URL
+    def __init__(self, api_key: str = None, api_secret: str = None):
+        self.api_key = api_key or Config.API_KEY
+        self.api_secret = api_secret or Config.API_SECRET
+        self.base_url = Config.BASE_URL
 
     def _headers(self):
         return {
             "x-apikey": self.api_key,
+            "x-apisecret": self.api_secret,
             "Content-Type": "application/json"
         }
 

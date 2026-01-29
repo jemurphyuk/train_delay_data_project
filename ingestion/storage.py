@@ -31,7 +31,7 @@ class RawStorage:
         """)
         self.conn.commit()
 
-    def save_departures(self, station_code: str, payload: dict):
+    def _save_departures(self, station_code: str, payload: dict):
         query = """
             INSERT INTO raw_departures (ingested_at, station_code, payload)
             VALUES (%s, %s, %s)
