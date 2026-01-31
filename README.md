@@ -1,21 +1,18 @@
 # Train delay data project
-train_delay_data_project ingests live (or near-real-time) UK train data, processes it into useful features, trains a model to predict delays, serves the predictions through a simple dashboard or API
+train_delay_data_project ingests live (or near-real-time) TfL train data, processes it into useful features, trains a model to predict line delays and serves the predictions through a simple dashboard or API
 ## Project overview
 ### Goal - build a small but realistic system that
-* Ingests live (or near-real-time) UK train data
+* Ingests live (or near-real-time) TfL train data
 * Processes it into useful features
 * Trains a model to predict delays
 * Serves the predictions through a simple dashboard or API
 * Aim to phase in real-time streaming
-### Data sources you can use
-* National Rail data feeds – they provide APIs and XML feeds via their developer platform and the Rail Data Marketplace, including real-time information from systems like Darwin and performance-related data
-* Network Rail open data feeds – they offer public operational feeds such as realtime performance, schedules, and movement data once you create an account
-* Third-party APIs – services like UK Train API or Realtime Trains offer live and schedule data for British rail, sometimes in simpler formats for developers.
-* You can start with static or historical data from these sources (or even CSV exports) and only later wire in “live” ingestion.
+### Data sources used
+* TfL API Portal for line, station and train information
 ### Recommended tech stack
 * Ingestion & storage
   * Python scripts for pulling data
-  * PostgreSQL or DuckDB for storage (local is fine)
+  * MySQL locally
 * Transformation & modelling
   * dbt for data modelling and tests
   * Python/scikit-learn for the prediction model
@@ -46,18 +43,17 @@ train_delay_data_project ingests live (or near-real-time) UK train data, process
   * Confidence or probability
 ## Get and explore the data
 1.	Register / choose data source:
-o	Option A: Use National Rail / Network Rail feeds and pull performance/timetable data.
-o	Option B: Use a third-party API like UK Train API or Realtime Trains if they’re easier to integrate.
-2.	Write a simple ingestion script (Python):
-o	Hit the API periodically or download a historical dump
-o	Store responses as JSON or into raw_trains / raw_movements tables
+    * TfL Portal API
+2.	Write a simple modularised ingestion script (Python):
+    * Hit the API periodically or download a historical dump
+    * Store responses as JSON or into raw_trains / raw_movements tables
 3.	Goal for this phase
-o	You can query: “For this train, what time was it supposed to arrive, and when did it actually arrive?”
+    * You can query: “For this train, what time was it supposed to arrive, and when did it actually arrive?”
 4.	Do an exploratory notebook to inspect
-o	Distribution of delays
-o	Difference by time of day or station
-o	Missing or messy fields
-o	This will also help you design your features.
+    * Distribution of delays
+    * Difference by time of day or station
+    * Missing or messy fields
+    * This will also help you design your features.
 ### Build a proper data model with dbt
 * Set up dbt project
   * Connect it to your Postgres/DuckDB

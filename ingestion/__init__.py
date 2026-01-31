@@ -4,17 +4,17 @@
 Ingestion package for UK train delay project.
 
 Provides:
-- NationalRailClient: API client for National Rail live data
+- TflClient: API client for TfL live data
 - RawStorage: storage for raw departures
 - DepartureIngestion: high-level ingestion job
 """
 
-from client import NationalRailClient
+from client import TflClient
 from storage import RawStorage
 from fetch_departures import DepartureIngestion
 
 __all__ = [
-    "NationalRailClient",
+    "TflClient",
     "RawStorage",
     "DepartureIngestion",
 ]
